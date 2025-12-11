@@ -6,7 +6,6 @@
 
 from collections.abc import Generator, Mapping
 from typing import Any, override
-import os
 
 import httpx
 import oci
@@ -67,9 +66,7 @@ class OciUserPrincipalAuth(HttpxOciAuth):
         config = oci.config.from_file(config_file, profile_name)
         oci.config.validate_config(config)  # type: ignore
         key_content = ""
-        # Expand ~ to full home directory path
-        key_file_path = os.path.expanduser(config["key_file"])
-        with open(key_file_path) as f:
+        with open(config["key_file"]) as f:
             key_content = f.read()
 
         self.signer = oci.signer.Signer(
